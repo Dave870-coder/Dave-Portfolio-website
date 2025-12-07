@@ -230,6 +230,55 @@
       box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
     }
 
+    .button-container {
+      display: flex;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .submit-btn {
+      flex: 1;
+      padding: 14px 24px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .skip-btn {
+      flex: 1;
+      padding: 14px 24px;
+      background: white;
+      color: #667eea;
+      border: 2px solid #667eea;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .skip-btn:hover {
+      background: rgba(102, 126, 234, 0.1);
+      transform: translateY(-2px);
+    }
+
     @media (max-width: 600px) {
       .quiz-container {
         padding: 25px;
@@ -277,6 +326,10 @@
         <div class="question-counter" id="counter">Question 1 of 39</div>
         <div class="question" id="question">Question text</div>
         <div class="answers" id="answers"></div>
+        <div class="button-container">
+          <button class="submit-btn" id="submitBtn" style="display:none;">✅ Submit Answer</button>
+          <button class="skip-btn" id="skipBtn" style="display:none;">⏭️ Skip</button>
+        </div>
         <div class="score-section" id="score"></div>
       </div>
     </div>
@@ -330,6 +383,7 @@
     let timerInterval;
     let quizEnded = false;
     let selectedAnswers = [];
+    let selectedAnswerIndex = -1; // Track which answer is selected
 
     function formatTime(seconds) {
       const mins = Math.floor(seconds / 60);
@@ -388,6 +442,18 @@
       `;
     }
 
+    function nextQuestion() {
+      currentQuestion++;
+      selectedAnswerIndex = -1;
+      updateProgressBar();
+      if (currentQuestion < quizData.length) {
+        loadQuestion();
+      } else {
+        clearInterval(timerInterval);
+        endQuiz();
+      }
+    }
+
     function loadQuestion() {
       if (quizEnded) return;
 
@@ -395,45 +461,59 @@
       const answersEl = document.getElementById("answers");
       const scoreEl = document.getElementById("score");
       const counterEl = document.getElementById("counter");
+      const submitBtn = document.getElementById("submitBtn");
+      const skipBtn = document.getElementById("skipBtn");
 
       const current = quizData[currentQuestion];
       questionEl.innerText = current.question;
       counterEl.innerText = `Question ${currentQuestion + 1} of ${quizData.length}`;
       answersEl.innerHTML = "";
       scoreEl.innerText = `Score: ${score}`;
+      submitBtn.style.display = "block";
+      skipBtn.style.display = "block";
+      submitBtn.disabled = true;
+      selectedAnswerIndex = -1;
 
       current.answers.forEach((answer, index) => {
         const btn = document.createElement("button");
         btn.classList.add("answer-btn");
         btn.innerText = answer;
         btn.onclick = () => {
-          if (index === current.correct) {
-            score++;
-            btn.classList.add("selected");
-          }
-          
-          // Disable all buttons after selection
+          // Remove previous selection
           document.querySelectorAll(".answer-btn").forEach(b => {
-            b.disabled = true;
+            b.classList.remove("selected");
           });
           
-          // Move to next question after 1 second
-          setTimeout(() => {
-            currentQuestion++;
-            updateProgressBar();
-            if (currentQuestion < quizData.length) {
-              loadQuestion();
-            } else {
-              clearInterval(timerInterval);
-              endQuiz();
-            }
-          }, 1000);
+          // Select current button
+          btn.classList.add("selected");
+          selectedAnswerIndex = index;
+          submitBtn.disabled = false;
         };
         answersEl.appendChild(btn);
       });
 
       updateProgressBar();
     }
+
+    // Submit button handler
+    document.getElementById("submitBtn").addEventListener("click", () => {
+      if (selectedAnswerIndex === -1) {
+        alert("Please select an answer");
+        return;
+      }
+      
+      const current = quizData[currentQuestion];
+      if (selectedAnswerIndex === current.correct) {
+        score++;
+      }
+      
+      nextQuestion();
+    });
+
+    // Skip button handler
+    document.getElementById("skipBtn").addEventListener("click", () => {
+      nextQuestion();
+    });
 
     loadQuestion();
     startTimer();
