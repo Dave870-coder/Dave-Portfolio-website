@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <link rel="icon" type="image/jpeg" href="anime.jpg"width="100px"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> Quiz App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #aac707;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .quiz-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      text-align: center;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .timer {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #f0f0f0;
+      color: #333;
+    }
+    .timer.warning {
+      background-color: #fff3cd;
+      color: #ff6b6b;
+    }
+    .timer.danger {
+      background-color: #f8d7da;
+      color: #d32f2f;
+      animation: pulse 0.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    .question {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .answer-btn {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      background-color: #3498db;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .answer-btn:hover {
+      background-color: #2980b9;
+    }
+    .score {
+      font-size: 18px;
+      margin-top: 20px;
+    }
+    .question-counter {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <div id="quiz">
+      <div class="timer" id="timer">⏱️ 30:00</div>
+      <div class="question-counter" id="counter">Question 1 of 39</div>
+      <div class="question" id="question">Question text</div>
+      <div id="answers"></div>
+      <div class="score" id="score"></div>
+    </div>
+  </div>
+  <script>
+    const quizData = [
+      { question: "What does AI stand for?", answers: ["Automated Intelligence", "Artificial Intelligence", "Analog Information", "Advanced Internet"], correct: 1 },
+      { question: "Who is considered the father of Artificial Intelligence?", answers: ["Alan Turing", "John McCarthy", "Andrew Ng", "Geoffrey Hinton"], correct: 1 },
+      { question: "Which language is commonly used for AI programming?", answers: ["Python", "HTML", "CSS", "SQL"], correct: 0 },
+      { question: "What is Machine Learning?", answers: ["Manual coding", "Learning from data", "A search engine", "A programming language"], correct: 1 },
+      { question: "Which of the following is a type of Machine Learning?", answers: ["Supervised", "Undirected", "Interpreted", "Logical"], correct: 0 },
+      { question: "Which AI model is used in language translation?", answers: ["CNN", "RNN", "GAN", "SVM"], correct: 1 },
+      { question: "What is Deep Learning?", answers: ["Shallow learning", "Simple algorithms", "Subset of ML using neural networks", "Data mining"], correct: 2 },
+      { question: "What is the Turing Test used for?", answers: ["Check software bugs", "Measure computation", "Test AI intelligence", "Check algorithms"], correct: 2 },
+      { question: "What does NLP stand for?", answers: ["Neural Logical Program", "Natural Language Processing", "Network Learning Protocol", "Non-Linear Programming"], correct: 1 },
+      { question: "Which of these is a neural network algorithm?", answers: ["KNN", "Naive Bayes", "Backpropagation", "Apriori"], correct: 2 },
+      { question: "Which AI branch deals with understanding language?", answers: ["NLP", "CV", "RL", "DL"], correct: 0 },
+      { question: "What is Computer Vision?", answers: ["AI for visuals", "Computer graphics", "3D rendering", "HTML graphics"], correct: 0 },
+      { question: "Which is a type of neural network?", answers: ["CNN", "FTP", "API", "URL"], correct: 0 },
+      { question: "What is reinforcement learning?", answers: ["Learning with labels", "Learning by rewards", "Learning unsupervised", "Learning graphs"], correct: 1 },
+      { question: "Which of these is an AI application?", answers: ["Face recognition", "File compression", "Word processing", "PDF reading"], correct: 0 },
+      { question: "Which company developed ChatGPT?", answers: ["Google", "Microsoft", "OpenAI", "Amazon"], correct: 2 },
+      { question: "Which AI is famous for playing Go?", answers: ["DeepMind", "Watson", "GPT-3", "Siri"], correct: 0 },
+      { question: "What is an expert system?", answers: ["Human-only tool", "Rule-based AI system", "Robot", "Text editor"], correct: 1 },
+      { question: "What is overfitting in ML?", answers: ["Too simple model", "Model fits noise", "Too much data", "High bias"], correct: 1 },
+      { question: "Which library is used in Python for ML?", answers: ["NumPy", "Pandas", "TensorFlow", "Jinja"], correct: 2 },
+      { question: "What is a decision tree?", answers: ["Tree structure graph", "Image filter", "NLP model", "Database"], correct: 0 },
+      { question: "Which technique reduces model dimensions?", answers: ["PCA", "SVM", "CNN", "RNN"], correct: 0 },
+      { question: "Which metric evaluates classification?", answers: ["Accuracy", "MSE", "MAE", "R-squared"], correct: 0 },
+      { question: "What does GAN stand for?", answers: ["Generative Adversarial Network", "General AI Net", "Graphic AI Network", "Google AI Node"], correct: 0 },
+      { question: "Which is NOT a type of learning?", answers: ["Supervised", "Unsupervised", "Reinforcement", "Fabricated"], correct: 3 },
+      { question: "Which model type works on sequences?", answers: ["RNN", "CNN", "GAN", "SVM"], correct: 0 },
+      { question: "Which task is AI used for?", answers: ["Speech recognition", "Browser rendering", "File compression", "RAM management"], correct: 0 },
+      { question: "Which algorithm is used in classification?", answers: ["Naive Bayes", "PCA", "K-Means", "Apriori"], correct: 0 },
+      { question: "Which of these is supervised learning?", answers: ["Linear Regression", "Apriori", "K-Means", "PCA"], correct: 0 },
+      { question: "Which is a popular AI assistant?", answers: ["Alexa", "PowerPoint", "Excel", "Photoshop"], correct: 0 },
+      { question: "Which AI technique simulates the human brain?", answers: ["Neural Networks", "Decision Trees", "SVM", "Clustering"], correct: 0 },
+      { question: "Which is a cloud-based AI platform?", answers: ["Azure AI", "MySQL", "Bootstrap", "Node.js"], correct: 0 },
+      { question: "Which is used to label data?", answers: ["Supervised learning", "Unsupervised learning", "Reinforcement learning", "Data mining"], correct: 0 },
+      { question: "What is the main goal of AI?", answers: ["Mimic human intelligence", "Make websites", "Reduce RAM usage", "Format hard drives"], correct: 0 },
+      { question: "Which is NOT a deep learning library?", answers: ["TensorFlow", "PyTorch", "Keras", "Bootstrap"], correct: 3 },
+      { question: "Which AI task involves predicting a value?", answers: ["Regression", "Classification", "Clustering", "Reinforcement"], correct: 0 },
+      { question: "Which is a clustering method?", answers: ["K-Means", "Linear Regression", "Logistic Regression", "RNN"], correct: 0 },
+      { question: "Which is an unsupervised learning algorithm?", answers: ["K-Means", "Decision Tree", "Naive Bayes", "Logistic Regression"], correct: 0 },
+      { question: "Which is a feature selection method?", answers: ["Chi-Square Test", "RNN", "SVM", "ReLU"], correct: 0 }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    let timeLeft = 30 * 60; // 30 minutes in seconds
+    let timerInterval;
+    let quizEnded = false;
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `⏱️ ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        const timerEl = document.getElementById("timer");
+        timerEl.innerText = formatTime(timeLeft);
+
+        // Change color based on time remaining
+        if (timeLeft <= 60) {
+          timerEl.classList.add("danger");
+          timerEl.classList.remove("warning");
+        } else if (timeLeft <= 300) {
+          timerEl.classList.add("warning");
+          timerEl.classList.remove("danger");
+        } else {
+          timerEl.classList.remove("warning", "danger");
+        }
+
+        // End quiz when time runs out
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          endQuiz();
+        }
+      }, 1000);
+    }
+
+    function endQuiz() {
+      quizEnded = true;
+      clearInterval(timerInterval);
+      const questionEl = document.getElementById("question");
+      const answersEl = document.getElementById("answers");
+      const scoreEl = document.getElementById("score");
+      const counterEl = document.getElementById("counter");
+
+      questionEl.innerText = "Time's Up!";
+      answersEl.innerHTML = "";
+      counterEl.innerText = "";
+      scoreEl.innerText = `Your score: ${score} / ${quizData.length}\n\nTime used: 30:00`;
+    }
+
+    function loadQuestion() {
+      if (quizEnded) return;
+
+      const questionEl = document.getElementById("question");
+      const answersEl = document.getElementById("answers");
+      const scoreEl = document.getElementById("score");
+      const counterEl = document.getElementById("counter");
+
+      scoreEl.innerText = "";
+      const current = quizData[currentQuestion];
+      questionEl.innerText = current.question;
+      counterEl.innerText = `Question ${currentQuestion + 1} of ${quizData.length}`;
+      answersEl.innerHTML = "";
+
+      current.answers.forEach((answer, index) => {
+        const btn = document.createElement("button");
+        btn.classList.add("answer-btn");
+        btn.innerText = answer;
+        btn.onclick = () => {
+          if (index === current.correct) {
+            score++;
+          }
+          currentQuestion++;
+          if (currentQuestion < quizData.length) {
+            loadQuestion();
+          } else {
+            clearInterval(timerInterval);
+            questionEl.innerText = "Quiz Completed!";
+            answersEl.innerHTML = "";
+            counterEl.innerText = "";
+            const timeTaken = 30 * 60 - timeLeft;
+            const mins = Math.floor(timeTaken / 60);
+            const secs = timeTaken % 60;
+            scoreEl.innerText = `Your score: ${score} / ${quizData.length}\n\nTime taken: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+          }
+        };
+        answersEl.appendChild(btn);
+      });
+    }
+
+    loadQuestion();
+    startTimer();
+  </script>
+</body>
+</html>

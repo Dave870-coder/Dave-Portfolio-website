@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Dave Portfolio</title>
+    <link rel="stylesheet" href="style.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/index.min.js"></script>
+</head>
+<body>
+
+<header class="navbar">
+    <h1 class="logo">Dave<span>.</span></h1>
+    <nav>
+        <a href="#home">// home</a>
+        <a href="#projects">// projects</a>
+        <a href="#upload">// upload</a>
+        <a href="#skills">// skills</a>
+        <a href="#experience">// experience</a>
+        <a href="#contact">// contact</a>
+    </nav>
+</header>
+
+<!-- HERO -->
+<section id="home" class="hero">
+    <div class="hero-content">
+        <h2>✨ DAVE PORTFOLIO</h2>
+        <p>SOFTWARE ENGINEER • FRONT-END DEVELOPER • FULL-STACK INNOVATOR</p>
+        <a href="#projects" class="btn">Explore Projects</a>
+    </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="section">
+    <h3>// Projects</h3>
+    <div class="card-container">
+
+        <a href="quiz app/index.html" class="card">
+            <h4>Quiz App</h4>
+            <p>Timed exam application with auto-correction.</p>
+        </a>
+        <a href="Weather app/weather.html" class="card">
+            <h4>Weather App</h4>
+            <p>Real-time weather application with city search.</p>
+        </a>
+    </div>
+</section>
+
+<!-- ✅ CODE FILE UPLOAD -->
+<section id="upload" class="section dark">
+    <h3>// Upload Project Source Code</h3>
+
+    <div class="upload-box">
+        <input 
+            type="file" 
+            id="projectFile" 
+            multiple
+            accept=".zip,.html,.css,.js,.jsx,.ts,.json,.md,.java,.py,.php,.c,.cpp,.go"
+            hidden
+        />
+
+        <label for="projectFile" class="upload-area">
+            <p>📁 Upload your project source code</p>
+            <span>HTML, CSS, JS, Java, Python, ZIP & more</span>
+        </label>
+
+        <div id="fileList" class="file-list-container"></div>
+
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+            <button id="submitFiles" class="btn" style="display:none; flex: 1;">✅ Submit Projects</button>
+            <button id="viewProjects" class="btn" style="display:none; flex: 1;">👁️ View Projects</button>
+            <button id="clearFiles" class="btn btn-secondary" style="display:none; flex: 1;">Clear Files</button>
+        </div>
+    </div>
+</section>
+
+<!-- 💾 DATABASE MANAGEMENT -->
+<section id="database" class="section dark">
+    <h3>// Database Management</h3>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+        <button id="viewDatabase" class="btn">📊 View Database</button>
+        <button id="exportData" class="btn">💾 Export Data</button>
+        <button id="importData" class="btn">📥 Import Data</button>
+        <button id="deleteProject" class="btn">🗑️ Delete Project</button>
+        <button id="clearDatabase" class="btn btn-secondary" style="background-color: #ef4444;">🗑️ Clear All</button>
+    </div>
+    <div id="databaseInfo" style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px; display: none;">
+        <p id="projectCount" style="margin: 5px 0; font-size: 14px;"><strong>Total Projects:</strong> <span id="projectCountValue">0</span></p>
+        <p id="fileCount" style="margin: 5px 0; font-size: 14px;"><strong>Total Files Stored:</strong> <span id="fileCountValue">0</span></p>
+        <p id="dbSize" style="margin: 5px 0; font-size: 14px;"><strong>Database Size:</strong> <span id="dbSizeValue">0 MB</span></p>
+        <div id="projectList" style="margin-top: 10px; max-height: 300px; overflow-y: auto; font-size: 12px;"></div>
+    </div>
+    
+    <!-- Delete Project Section -->
+    <div id="deleteProjectSection" style="margin-top: 20px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 8px; display: none;">
+        <h4 style="margin-top: 0; color: #ef4444;">Delete Project</h4>
+        <p style="font-size: 13px; margin: 10px 0;">Select a project to delete:</p>
+        <div id="deleteProjectList" style="max-height: 250px; overflow-y: auto; margin-bottom: 10px;"></div>
+        <button id="cancelDelete" class="btn btn-secondary" style="width: 100%;">Cancel</button>
+    </div>
+    
+    <input type="file" id="importFile" accept=".json" hidden/>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="section">
+    <h3>// Technical Skills</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
+        <div class="skill-card">
+            <h4>Frontend</h4>
+            <p>JavaScript · React · HTML · CSS · TypeScript · Vue.js</p>
+        </div>
+        <div class="skill-card">
+            <h4>Backend</h4>
+            <p>Node.js · Java · Python · MongoDB · REST APIs</p>
+        </div>
+        <div class="skill-card">
+            <h4>Tools & Platforms</h4>
+            <p>Git · GitHub · VS Code · Webpack · Docker</p>
+        </div>
+        <div class="skill-card">
+            <h4>Other Expertise</h4>
+            <p>Web Development · App Development · Database Design · System Architecture</p>
+        </div>
+    </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="section dark">
+    <h3>// Experience & Expertise</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+        <div class="experience-card">
+            <h4>🚀 Full-Stack Development</h4>
+            <p>Experienced in building scalable web applications and mobile apps with modern frameworks and best practices.</p>
+        </div>
+        <div class="experience-card">
+            <h4>🎨 UI/UX Design Integration</h4>
+            <p>Creating responsive, intuitive interfaces that blend beautiful design with flawless functionality.</p>
+        </div>
+        <div class="experience-card">
+            <h4>⚡ Performance Optimization</h4>
+            <p>Optimizing applications for speed, reliability, and scalability in production environments.</p>
+        </div>
+        <div class="experience-card">
+            <h4>💼 Team Collaboration</h4>
+            <p>Working with teams to deliver high-quality solutions on time using agile methodologies.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section">
+    <h3>// Get In Touch</h3>
+    <div style="text-align: center; max-width: 700px; margin: 0 auto;">
+        <p style="font-size: 16px; line-height: 1.8; margin-bottom: 40px;">
+            Have a project in mind or want to collaborate? I'd love to hear from you! Let's create something amazing together.
+        </p>
+        
+        <!-- Contact Form -->
+        <form id="contactForm" style="background: linear-gradient(135deg, rgba(102, 255, 255, 0.05), rgba(0, 255, 255, 0.05)); padding: 30px; border-radius: 12px; border: 1px solid rgba(102, 255, 255, 0.2); margin-bottom: 30px;">
+            <div style="margin-bottom: 15px;">
+                <input type="text" id="contactName" placeholder="Your Name" style="width: 100%; padding: 12px; border: 1px solid rgba(102, 255, 255, 0.3); border-radius: 6px; background: rgba(0, 0, 0, 0.3); color: #fff; font-size: 14px;" required>
+            </div>
+            <div style="margin-bottom: 15px;">
+                <input type="email" id="contactEmail" placeholder="Your Email" style="width: 100%; padding: 12px; border: 1px solid rgba(102, 255, 255, 0.3); border-radius: 6px; background: rgba(0, 0, 0, 0.3); color: #fff; font-size: 14px;" required>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <textarea id="contactMessage" placeholder="Your Message" rows="5" style="width: 100%; padding: 12px; border: 1px solid rgba(102, 255, 255, 0.3); border-radius: 6px; background: rgba(0, 0, 0, 0.3); color: #fff; font-size: 14px; resize: vertical;" required></textarea>
+            </div>
+            <button type="submit" class="btn" style="width: 100%;">✉️ Send Message</button>
+        </form>
+        
+        <!-- Quick Contact Links -->
+        <p style="margin-bottom: 20px; font-size: 14px; opacity: 0.8;">Or reach out directly:</p>
+        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-bottom: 30px;">
+            <a href="https://mail.google.com/mail/?view=cm&fs=1&to=oikechukwu312@email.com" target="_blank" class="btn" style="color: #fff; text-decoration: none; flex: 1; min-width: 150px;">📧 Gmail</a>
+            <a href="https://www.linkedin.com/in/ikechukwu-onuoha-49a864342" target="_blank" class="btn" style="color: #fff; text-decoration: none; flex: 1; min-width: 150px;">💼 LinkedIn</a>
+            <a href="https://github.com/Dave870-coder" target="_blank" class="btn" style="color: #fff; text-decoration: none; flex: 1; min-width: 150px;">🐙 GitHub</a>
+        </div>
+        
+        <!-- Contact Info -->
+        <div style="padding: 20px; background: rgba(102, 255, 255, 0.05); border-radius: 8px; border-left: 3px solid #6ff;">
+            <p style="font-size: 14px; margin: 8px 0; opacity: 0.8;">
+                <strong style="color: #6ff;">📱 Phone:</strong> +2349035997559
+            </p>
+            <p style="font-size: 14px; margin: 8px 0; opacity: 0.8;">
+                <strong style="color: #6ff;">📧 Email:</strong> oikechukwu312@email.com
+            </p>
+            <p style="font-size: 14px; margin: 8px 0; opacity: 0.8;">
+                <strong style="color: #6ff;">⏰ Response Time:</strong> Within 24 hours
+            </p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2025 Dave Portfolio</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
