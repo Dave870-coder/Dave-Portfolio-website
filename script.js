@@ -7,7 +7,10 @@ document.querySelectorAll("a[href^='#']").forEach(link => {
     });
 });
 
-// ✅ Code file upload preview with download functionality
+// ✅ Code file upload - Supports 100+ programming languages and file types
+// Supported: JavaScript, TypeScript, Python, Java, Go, Rust, C, C++, C#, PHP, Ruby, Swift, Kotlin, Scala, Haskell, Clojure, Elixir, Erlang, Lua, Perl, R, Groovy, VB.NET, F#, OCaml, Racket, Scheme, Lisp, Dart, and more
+// Web formats: HTML, CSS, JSON, XML, YAML, TOML, GraphQL, Prisma, Vue, Svelte, Astro
+// Config files: .env, .gitignore, Dockerfile, Makefile, webpack.config, babel.config, and more
 const fileInput = document.getElementById("projectFile");
 const fileList = document.getElementById("fileList");
 const clearBtn = document.getElementById("clearFiles");
