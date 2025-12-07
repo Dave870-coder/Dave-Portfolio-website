@@ -1,88 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <link rel="icon" type="image/jpeg" href="anime.jpg"width="100px"/>
+   <link rel="icon" type="image/jpeg" href="anime.jpg" width="100px"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> Quiz App</title>
+  <title>Quiz App - AI Mastery Challenge</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #aac707;
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      padding: 20px;
     }
-    .quiz-container {
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 300px;
+
+    .quiz-wrapper {
+      width: 100%;
+      max-width: 700px;
+    }
+
+    .header {
       text-align: center;
-      max-height: 90vh;
-      overflow-y: auto;
+      margin-bottom: 30px;
+      color: white;
     }
+
+    .header h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .quiz-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideIn 0.6s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .timer-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
     .timer {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 20px;
-      padding: 10px;
-      border-radius: 5px;
-      background-color: #f0f0f0;
-      color: #333;
+      font-size: 28px;
+      font-weight: 700;
+      padding: 12px 20px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      min-width: 140px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      transition: all 0.3s ease;
     }
+
     .timer.warning {
-      background-color: #fff3cd;
-      color: #ff6b6b;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
     }
+
     .timer.danger {
-      background-color: #f8d7da;
-      color: #d32f2f;
-      animation: pulse 0.5s infinite;
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      animation: pulse 0.6s infinite;
+      box-shadow: 0 4px 15px rgba(250, 112, 154, 0.6);
     }
+
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
+      50% { transform: scale(1.08); }
     }
-    .question {
-      font-size: 20px;
-      margin-bottom: 20px;
+
+    .progress-bar {
+      flex: 1;
+      margin: 0 20px;
+      height: 8px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
     }
-    .answer-btn {
-      display: block;
-      margin: 10px 0;
-      padding: 10px;
-      width: 100%;
-      border: none;
-      background-color: #3498db;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      border-radius: 10px;
+      transition: width 0.3s ease;
     }
-    .answer-btn:hover {
-      background-color: #2980b9;
-    }
-    .score {
-      font-size: 18px;
-      margin-top: 20px;
-    }
+
     .question-counter {
       font-size: 14px;
+      font-weight: 600;
+      color: #667eea;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 15px;
+    }
+
+    .question {
+      font-size: 22px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 30px;
+      line-height: 1.6;
+      min-height: 60px;
+    }
+
+    .answers {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .answer-btn {
+      padding: 16px;
+      border: 2px solid #e0e0e0;
+      background: white;
+      color: #333;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      position: relative;
+      text-align: left;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .answer-btn:hover {
+      border-color: #667eea;
+      background: rgba(102, 126, 234, 0.05);
+      transform: translateX(5px);
+    }
+
+    .answer-btn.selected {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-color: transparent;
+    }
+
+    .answer-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .score-section {
+      text-align: center;
+      font-size: 18px;
+      color: #333;
+      margin-top: 20px;
+      padding: 20px;
+      background: #f8f9ff;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .completion-screen {
+      text-align: center;
+    }
+
+    .completion-screen h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .completion-screen .score-display {
+      font-size: 48px;
+      font-weight: 800;
+      color: #667eea;
+      margin: 20px 0;
+    }
+
+    .completion-screen .score-text {
+      font-size: 16px;
       color: #666;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    .restart-btn {
+      padding: 12px 30px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+      margin-top: 20px;
+    }
+
+    .restart-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    @media (max-width: 600px) {
+      .quiz-container {
+        padding: 25px;
+      }
+
+      .header h1 {
+        font-size: 24px;
+      }
+
+      .question {
+        font-size: 18px;
+      }
+
+      .timer-section {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .progress-bar {
+        width: 100%;
+        margin: 0;
+      }
+
+      .timer {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="quiz-container">
-    <div id="quiz">
-      <div class="timer" id="timer">⏱️ 30:00</div>
-      <div class="question-counter" id="counter">Question 1 of 39</div>
-      <div class="question" id="question">Question text</div>
-      <div id="answers"></div>
-      <div class="score" id="score"></div>
+  <div class="quiz-wrapper">
+    <div class="header">
+      <h1>🧠 AI Mastery Quiz</h1>
+      <p>Test Your Artificial Intelligence Knowledge</p>
+    </div>
+
+    <div class="quiz-container">
+      <div id="quiz">
+        <div class="timer-section">
+          <div class="timer" id="timer">⏱️ 30:00</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+        <div class="question-counter" id="counter">Question 1 of 39</div>
+        <div class="question" id="question">Question text</div>
+        <div class="answers" id="answers"></div>
+        <div class="score-section" id="score"></div>
+      </div>
     </div>
   </div>
   <script>
@@ -133,11 +329,17 @@
     let timeLeft = 30 * 60; // 30 minutes in seconds
     let timerInterval;
     let quizEnded = false;
+    let selectedAnswers = [];
 
     function formatTime(seconds) {
       const mins = Math.floor(seconds / 60);
       const secs = seconds % 60;
       return `⏱️ ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+    }
+
+    function updateProgressBar() {
+      const progress = ((currentQuestion) / quizData.length) * 100;
+      document.getElementById("progressFill").style.width = progress + "%";
     }
 
     function startTimer() {
@@ -168,15 +370,22 @@
     function endQuiz() {
       quizEnded = true;
       clearInterval(timerInterval);
-      const questionEl = document.getElementById("question");
-      const answersEl = document.getElementById("answers");
-      const scoreEl = document.getElementById("score");
-      const counterEl = document.getElementById("counter");
+      const quiz = document.getElementById("quiz");
+      const timeTaken = 30 * 60 - timeLeft;
+      const mins = Math.floor(timeTaken / 60);
+      const secs = timeTaken % 60;
 
-      questionEl.innerText = "Time's Up!";
-      answersEl.innerHTML = "";
-      counterEl.innerText = "";
-      scoreEl.innerText = `Your score: ${score} / ${quizData.length}\n\nTime used: 30:00`;
+      quiz.innerHTML = `
+        <div class="completion-screen">
+          <h2>🎉 Quiz Completed!</h2>
+          <div class="score-display">${score}/${quizData.length}</div>
+          <div class="score-text">
+            <p>⏱️ Time Taken: ${mins}:${secs < 10 ? '0' : ''}${secs}</p>
+            <p>📊 Accuracy: ${Math.round((score / quizData.length) * 100)}%</p>
+          </div>
+          <button class="restart-btn" onclick="location.reload()">🔄 Restart Quiz</button>
+        </div>
+      `;
     }
 
     function loadQuestion() {
@@ -187,11 +396,11 @@
       const scoreEl = document.getElementById("score");
       const counterEl = document.getElementById("counter");
 
-      scoreEl.innerText = "";
       const current = quizData[currentQuestion];
       questionEl.innerText = current.question;
       counterEl.innerText = `Question ${currentQuestion + 1} of ${quizData.length}`;
       answersEl.innerHTML = "";
+      scoreEl.innerText = `Score: ${score}`;
 
       current.answers.forEach((answer, index) => {
         const btn = document.createElement("button");
@@ -200,23 +409,30 @@
         btn.onclick = () => {
           if (index === current.correct) {
             score++;
+            btn.classList.add("selected");
           }
-          currentQuestion++;
-          if (currentQuestion < quizData.length) {
-            loadQuestion();
-          } else {
-            clearInterval(timerInterval);
-            questionEl.innerText = "Quiz Completed!";
-            answersEl.innerHTML = "";
-            counterEl.innerText = "";
-            const timeTaken = 30 * 60 - timeLeft;
-            const mins = Math.floor(timeTaken / 60);
-            const secs = timeTaken % 60;
-            scoreEl.innerText = `Your score: ${score} / ${quizData.length}\n\nTime taken: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
-          }
+          
+          // Disable all buttons after selection
+          document.querySelectorAll(".answer-btn").forEach(b => {
+            b.disabled = true;
+          });
+          
+          // Move to next question after 1 second
+          setTimeout(() => {
+            currentQuestion++;
+            updateProgressBar();
+            if (currentQuestion < quizData.length) {
+              loadQuestion();
+            } else {
+              clearInterval(timerInterval);
+              endQuiz();
+            }
+          }, 1000);
         };
         answersEl.appendChild(btn);
       });
+
+      updateProgressBar();
     }
 
     loadQuestion();
